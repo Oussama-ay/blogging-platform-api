@@ -29,18 +29,15 @@ function validatePostBody(body) {
     };
 }
 
-function getAllPosts(req, res) {
-    if (!term || typeof term !== 'string') {
-        return posts;
-    }
+async function getAllPosts(req, res) {
     const { term } = req.query;
 
-    const posts = postsService.getAllPosts(term);
+    const posts = await postsService.getAllPosts(term);
 
     res.json(posts);
 }
 
-function getPostById(req, res) {
+async function getPostById(req, res) {
     const postId = parsePostId(req.params.id);
 
     if (!postId) {
@@ -49,7 +46,7 @@ function getPostById(req, res) {
         });
     }
 
-    const post = postsService.getPostById(postId);
+    const post = await postsService.getPostById(postId);
 
     if (!post) {
         return res.status(404).json({
@@ -60,7 +57,7 @@ function getPostById(req, res) {
     res.json(post);
 }
 
-function createPost(req, res) {
+async function createPost(req, res) {
     const postData = validatePostBody(req.body);
 
     if (!postData) {
@@ -69,12 +66,12 @@ function createPost(req, res) {
         });
     }
 
-    const post = postsService.createPost(postData);
+    const post = await postsService.createPost(postData);
 
     res.status(201).json(post);
 }
 
-function updatePost(req, res) {
+async function updatePost(req, res) {
     const postId = parsePostId(req.params.id);
 
     if (!postId) {
@@ -91,7 +88,7 @@ function updatePost(req, res) {
         });
     }
 
-    const updatedPost = postsService.updatePost(postId, postData);
+    const updatedPost = await postsService.updatePost(postId, postData);
 
     if (!updatedPost) {
         return res.status(404).json({
@@ -102,7 +99,7 @@ function updatePost(req, res) {
     res.json(updatedPost);
 }
 
-function deletePost(req, res) {
+async function deletePost(req, res) {
     const postId = parsePostId(req.params.id);
 
     if (!postId) {
@@ -111,7 +108,7 @@ function deletePost(req, res) {
         });
     }
 
-    const wasDeleted = postsService.deletePost(postId);
+    const wasDeleted = await postsService.deletePost(postId);
 
     if (!wasDeleted) {
         return res.status(404).json({

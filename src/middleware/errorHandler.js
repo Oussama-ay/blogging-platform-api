@@ -1,5 +1,6 @@
 function errorHandler(err, req, res, next) {
-    console.error(err);
+    console.error('Error message:', err.message);
+    console.error(err.stack);
 
     if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
         return res.status(400).json({
